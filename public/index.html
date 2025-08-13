@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Smart Journal</title>
+</head>
+<body>
+  <h1>🎵 Reverse Diary</h1>
+
+  <!-- Spotify Playlist Section -->
+  <section>
+    <h2>🎶 Spotify Playlist</h2>
+    <button id="getSpotifyBtn" class="btn">Get Spotify Playlist</button>
+    <pre id="spotifyOutput"></pre>
+  </section>
+
+  <!-- Photo Upload Section -->
+  <section>
+    <h2>📷 Upload Photos</h2>
+    <input type="file" id="photoUploader" multiple accept="image/*" />
+    <div id="photoUploadPreview" style="margin-top:10px; display:flex; flex-wrap: wrap;"></div>
+  </section>
+
+  <!-- Location Section -->
+  <section>
+    <h2>📍 Send Location</h2>
+    <button id="getLocationBtn" class="btn">Send My Location</button>
+    <p id="locationStatus"></p>
+  </section>
+
+  <!-- Story Generation Section -->
+  <section>
+    <h2>📖 Generate Story</h2>
+    <textarea id="storyPrompt" placeholder="Write your story idea (optional)..."></textarea>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button id="generateStoryBtn" class="btn">Generate Story</button>
+      
+    </div>
+    <div id="storyContainer"></div>
+  </section>
+
+  <!-- Saved Stories Section -->
+  <section id="savedStoriesSection">
+  <h3>Saved Stories</h3>
+  <div id="savedStories"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  color: #222;
+  min-height: 100vh;
+  background: linear-gradient(107deg, #00b09b 31%, #96c93d 100%);
+  background-size: cover;
+}
+
+/* Headings */
+h1 {
+  text-align: center;
+  font-size: 70px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px #00f6ff;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* Glow Pulse for headings */
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 10px #00f6ff, 0 0 20px #00f6ff, 0 0 30px #00f6ff;
+  }
+  50% {
+    text-shadow: 0 0 20px #00fff6, 0 0 40px #00fff6, 0 0 60px #00fff6;
+  }
+}
+
+/* Section Fade In Up with delay */
+section {
+  background: rgba(135, 227, 232, 0.85);
+  padding: 20px;
+  margin: 25px 0;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s forwards;
+}
+
+section:nth-child(2) { animation-delay: 0.2s; }
+section:nth-child(3) { animation-delay: 0.4s; }
+section:nth-child(4) { animation-delay: 0.6s; }
+section:nth-child(5) { animation-delay: 0.8s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Buttons with bounce and pulse */
+.btn {
+  background: linear-gradient(45deg, #00b09b, #96c93d);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0, 176, 155, 0.7);
+  animation: pulseShadow 2.5s infinite;
+}
+
+.btn:hover {
+  animation: bounce 0.4s;
+  animation-fill-mode: forwards;
+  background: linear-gradient(45deg, #0bcaa3, #a8cf3e);
+  box-shadow: 0 8px 25px rgba(11, 202, 163, 0.9);
+  transform: scale(1.1);
+}
+
+/* Pulse shadow */
+@keyframes pulseShadow {
+  0%, 100% { box-shadow: 0 6px 15px rgba(0, 176, 155, 0.7); }
+  50% { box-shadow: 0 10px 30px rgba(0, 176, 155, 1); }
+}
+
+/* Bounce effect */
+@keyframes bounce {
+  0%, 100% { transform: scale(1.1); }
+  50% { transform: scale(1.25); }
+}
+
+/* Textarea */
+textarea {
+  width: 95%;
+  height: 100px;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 15px;
+  border: 2px solid #00b09b;
+  font-size: 1rem;
+  resize: vertical;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: #eafff6;
+  box-shadow: inset 0 0 10px #96c93d55;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #96c93d;
+  box-shadow: 0 0 12px #96c93dcc;
+}
+
+/* Spotify Output & Story Container */
+#spotifyOutput,
+#storyContainer {
+  white-space: pre-wrap;
+  background: #ffffff; /* White background for saved stories */
+  padding: 18px;
+  border-radius: 15px;
+  font-size: 1rem;
+  color: #004d40;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: inset 0 0 8px #00b09b55;
+  scrollbar-width: thin;
+  scrollbar-color: #00b09b #a8cf3e;
+}
+
+/* Custom scrollbar for Webkit */
+#spotifyOutput::-webkit-scrollbar,
+#storyContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+#spotifyOutput::-webkit-scrollbar-track,
+#storyContainer::-webkit-scrollbar-track {
+  background: #a8cf3e;
+  border-radius: 10px;
+}
+
+#spotifyOutput::-webkit-scrollbar-thumb,
+#storyContainer::-webkit-scrollbar-thumb {
+  background: #00b09b;
+  border-radius: 10px;
+}
+
+/* Photo preview */
+#photoUploadPreview img {
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 176, 155, 0.6);
+  margin: 10px;
+  height: 110px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+/* 3D tilt effect on hover */
+#photoUploadPreview img:hover {
+  transform: perspective(600px) rotateY(15deg) rotateX(5deg) scale(1.15);
+  box-shadow: 0 10px 25px rgba(0, 176, 155, 0.9);
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  body { padding: 15px; }
+  .btn {
+    width: 100%;
+    padding: 18px 0;
+    font-size: 1.2rem;
+  }
+}
