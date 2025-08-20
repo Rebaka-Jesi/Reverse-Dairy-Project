@@ -5,24 +5,19 @@ import bodyParser from "body-parser";
 
 dotenv.config();
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-// Add these lines here, to increase JSON and URL-encoded body size limits:
+// ===== Middleware =====
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
-
 app.use(express.static("public"));
-app.use(express.static("public"));
-app.use(bodyParser.json({ limit: "10mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
-
 
 // ===== 1. Generate Story with OpenAI =====
 app.post("/generate-story", async (req, res) => {
   try {
     const { location, playlist, photos, prompt: userPrompt, userLocation } = req.body;
 
-    // Compose photo details string
+    // Compose photo details
     let photoDetails = "No photo uploaded.";
     if (photos && photos.length > 0) {
       photoDetails = photos
@@ -30,20 +25,20 @@ app.post("/generate-story", async (req, res) => {
         .join("\n");
     }
 
-    // Compose playlist string
+    // Playlist string
     let playlistStr = "no songs";
     if (playlist && playlist.length > 0) {
       playlistStr = playlist.join(", ");
     }
 
-    // Format current date like: August 12, 2025
+    // Current date
     const currentDate = new Date().toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
     });
 
-    // Build prompt WITHOUT markdown stars to avoid raw ** showing
+    // Build prompt
     const prompt = userPrompt
       ? `Write a fun, lightly roasted diary story with lots of emojis in simple English, about 10 lines max. Based on this idea: "${userPrompt}". Keep it casual, witty, and entertaining. Use playful jokes and funny remarks. Do NOT add markdown like ** or __ anywhere.`
       : `Diary Entry: ${currentDate}
@@ -83,16 +78,18 @@ Write a fun, lightly roasted diary story with lots of emojis in simple English, 
   }
 });
 
-// ===== Spotify OAuth & API routes =====
+// ===== 2. Spotify OAuth & API =====
 
+// Spotify Login
 app.get("/auth/spotify", (req, res) => {
   const scopes = ["playlist-read-private", "playlist-read-collaborative"].join(" ");
-  const redirect_uri = encodeURIComponent("http://127.0.0.1:5000/auth/spotify/callback");
+  const redirect_uri = encodeURIComponent(`${process.env.BASE_URL}/auth/spotify/callback`);
   res.redirect(
     `https://accounts.spotify.com/authorize?client_id=${process.env.SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${redirect_uri}&scope=${encodeURIComponent(scopes)}`
   );
 });
 
+// Spotify Callback
 app.get("/auth/spotify/callback", async (req, res) => {
   const code = req.query.code || null;
   if (!code) return res.status(400).send("No code provided");
@@ -111,7 +108,7 @@ app.get("/auth/spotify/callback", async (req, res) => {
       body: new URLSearchParams({
         grant_type: "authorization_code",
         code,
-        redirect_uri: "http://127.0.0.1:5000/auth/spotify/callback",
+        redirect_uri: `${process.env.BASE_URL}/auth/spotify/callback`,
       }),
     });
 
@@ -128,6 +125,7 @@ app.get("/auth/spotify/callback", async (req, res) => {
   }
 });
 
+// Refresh Spotify Token
 async function getSpotifyAccessToken() {
   const authString = Buffer.from(
     `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
@@ -154,6 +152,7 @@ async function getSpotifyAccessToken() {
   }
 }
 
+// Fetch Spotify Playlist
 app.get("/spotify-playlist", async (req, res) => {
   try {
     const accessToken = await getSpotifyAccessToken();
@@ -191,14 +190,15 @@ app.get("/spotify-playlist", async (req, res) => {
   }
 });
 
-// ===== Receive Location =====
+// ===== 3. Location Endpoint =====
 app.post("/location", (req, res) => {
   const { latitude, longitude } = req.body;
   console.log(`Location received: lat=${latitude}, lon=${longitude}`);
   res.json({ status: "Location received" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://127.0.0.1:${PORT}`);
-  console.log(`Spotify authorize URL: http://127.0.0.1:${PORT}/auth/spotify`);
+// ===== 4. Start Server =====
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`👉 Spotify authorize URL: ${process.env.BASE_URL}/auth/spotify`);
 });
